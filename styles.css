@@ -49,13 +49,6 @@ body {
   margin-bottom: 28px;
 }
 
-.row-title {
-  font-size: 0.9rem;
-  font-weight: 600;
-  margin-bottom: 10px;
-  color: var(--muted);
-}
-
 .cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -284,8 +277,8 @@ body {
 
 .card.bottom .card-body {
   padding: 12px;
-  background: #dfe5ec;
-  border-top: none;
+  background: #cfd6df;
+  transition: background 0.2s ease;
 }
 
 .card.bottom .bottom-meta {
@@ -293,7 +286,7 @@ body {
   margin-bottom: 10px;
   font-size: 0.8rem;
   line-height: 1.35;
-  color: #4b5563;
+  color: #374151;
 }
 
 .card.bottom .interprete {
