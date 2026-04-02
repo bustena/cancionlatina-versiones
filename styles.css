@@ -83,6 +83,32 @@ body {
   outline: 3px solid #2f3440;
 }
 
+.card.top {
+  border: none;
+  color: #ffffff;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+  transform: translateY(0);
+  transition: all 0.18s ease;
+  overflow: hidden;
+}
+
+.card.top .media {
+  position: relative;
+}
+
+.card.top img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  display: block;
+}
+
+.card.top .card-inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
 /* IMÁGENES */
 
 .card img {
@@ -111,6 +137,97 @@ body {
 .meta {
   font-size: 0.75rem;
   color: var(--muted);
+}
+
+.card.top .audio-btn {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  border: none;
+  background: rgba(0,0,0,0.55);
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.card.top .audio-btn:hover {
+  background: rgba(0,0,0,0.75);
+}
+
+.card.top .audio-btn.playing {
+  background: rgba(0,0,0,0.9);
+}
+
+.card.top .card-body {
+  padding: 10px 12px 12px;
+}
+
+.card.top .author {
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #ffffff;
+}
+
+.card.top .work {
+  font-size: 0.85rem;
+  opacity: 0.95;
+}
+
+.card.top .meta {
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+.card.top .card-body {
+  padding: 10px 12px 12px;
+}
+
+.card.top .author {
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #ffffff;
+}
+
+.card.top .work {
+  font-size: 0.85rem;
+  opacity: 0.95;
+}
+
+.card.top .meta {
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+.card.top.active {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.18);
+}
+
+.card.top.active::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: inherit;
+  border: 2px solid rgba(255,255,255,0.9);
+  pointer-events: none;
+}
+
+.card.top.active .state-badge {
+  content: "Seleccionada";
+  opacity: 1;
+}
+
+.card.top.active .state-badge {
+  content: "Seleccionada";
+  opacity: 1;
+}
+
+.card.top:hover {
+  transform: translateY(-2px);
 }
 
 /* BOTÓN AUDIO */
