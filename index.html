@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Empareja las versiones</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="match_game_preliminar.css">
+</head>
+
+<body>
+
+  <div class="app">
+
+    <!-- CABECERA -->
+    <header class="header">
+      <h1>Empareja las versiones</h1>
+      <div id="progress" class="progress">0/0</div>
+    </header>
+
+    <!-- FILA SUPERIOR -->
+    <section class="row row-top">
+      <h2 class="row-title">Originales</h2>
+      <div id="topRow" class="cards"></div>
+    </section>
+
+    <!-- FILA INFERIOR -->
+    <section class="row row-bottom">
+      <h2 class="row-title">Versiones</h2>
+      <div id="bottomRow" class="cards"></div>
+    </section>
+
+  </div>
+
+  <!-- LIBRERÍA CSV -->
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+
+  <!-- LÓGICA -->
+  <script src="match_game_preliminar.js"></script>
+
+</body>
+</html>
