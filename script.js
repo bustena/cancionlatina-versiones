@@ -106,15 +106,19 @@ function setTopSelection(id) {
 function resetAudioButton(button) {
   if (!button) return;
   button.classList.remove("playing");
-  button.textContent = "Escuchar";
+  button.innerHTML = "▶";
   button.setAttribute("aria-pressed", "false");
+  button.setAttribute("aria-label", "Escuchar");
+  button.setAttribute("title", "Escuchar");
 }
 
 function setAudioButtonPlaying(button) {
   if (!button) return;
   button.classList.add("playing");
-  button.textContent = "Detener";
+  button.innerHTML = "■";
   button.setAttribute("aria-pressed", "true");
+  button.setAttribute("aria-label", "Detener");
+  button.setAttribute("title", "Detener");
 }
 
 function cleanupCurrentAudioState() {
@@ -343,37 +347,26 @@ function renderTopCards() {
 
     card.addEventListener("click", (event) => {
       if (card.classList.contains("locked")) return;
-
-      const audioBtn = card.querySelector(".audio-btn");
-
-      if (event.target.closest(".audio-btn")) {
-        return;
-      }
-
+      if (event.target.closest(".audio-btn")) return;
+    
       if (selectedTopId === pair.id) {
         clearTopSelection();
-        stopCurrentAudio();
       } else {
         setTopSelection(pair.id);
-        playRandomFragment(pair.audio1, audioBtn, `top-${pair.id}`);
       }
     });
-
+    
     const audioBtn = card.querySelector(".audio-btn");
     audioBtn.addEventListener("click", (event) => {
       event.stopPropagation();
       if (card.classList.contains("locked")) return;
-
-      if (selectedTopId !== pair.id) {
-        setTopSelection(pair.id);
-      }
-
+    
       playRandomFragment(pair.audio1, audioBtn, `top-${pair.id}`);
     });
-
-    topRowEl.appendChild(card);
-  });
-}
+    
+        topRowEl.appendChild(card);
+      });
+    }
 
 function renderBottomCards() {
   bottomRowEl.innerHTML = "";
