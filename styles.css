@@ -219,26 +219,27 @@ body {
   right: 8px;
   width: 34px;
   height: 34px;
-  border-radius: 999px;
+  margin: 0;
+  padding: 0;
   border: none;
-  background: rgba(0,0,0,0.55);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.55);
   color: #fff;
   font-size: 14px;
+  line-height: 1;
   cursor: pointer;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
-  transition: background 0.15s ease;
+  transition: background 0.15s ease, transform 0.15s ease;
 }
 
 .card.bottom .audio-btn:hover {
-  background: rgba(0,0,0,0.75);
+  background: rgba(0, 0, 0, 0.75);
 }
 
 .card.bottom .audio-btn.playing {
-  background: rgba(0,0,0,0.9);
+  background: rgba(0, 0, 0, 0.9);
 }
 
 .card.bottom {
