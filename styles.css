@@ -217,31 +217,146 @@ body {
 
 /* INFERIORES */
 
+/* INFERIORES */
+
 .card.bottom {
-  background: #e5e9f0;
+  background: #eef1f5;
+  border: none;
   cursor: pointer;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+  transform: translateY(0);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
 }
 
-.card.bottom.correct {
-  color: white;
+.card.bottom:hover {
+  transform: translateY(-2px);
 }
 
-/* botón general para inferiores */
+.card.bottom .card-inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.card.bottom .media {
+  position: relative;
+}
+
+.card.bottom img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  display: block;
+}
+
+.card.bottom .photo-overlay {
+  position: absolute;
+  inset: 0;
+  background: transparent;
+  pointer-events: none;
+}
+
+.card.bottom .bottom-text-overlay {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  color: #1f2937;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  pointer-events: none;
+}
+
+.card.bottom .card-body {
+  padding: 12px;
+  background: #dfe5ec;
+  transition: background 0.2s ease;
+}
+
+.card.bottom .bottom-meta {
+  min-height: 2.6em;
+  margin-bottom: 10px;
+  font-size: 0.8rem;
+  line-height: 1.35;
+  color: #4b5563;
+}
+
+.card.bottom .interprete {
+  font-size: 0.8rem;
+  line-height: 1.35;
+  color: #ffffff;
+}
 
 .card.bottom .audio-btn {
-  margin-top: 8px;
   width: 100%;
+  margin: 0;
   border: none;
   background: #2f3440;
   color: white;
   border-radius: 999px;
-  padding: 6px 0;
+  padding: 8px 0;
   font-size: 0.75rem;
   cursor: pointer;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.card.bottom .audio-btn:hover {
+  background: #1f2430;
 }
 
 .card.bottom .audio-btn.playing {
   background: #111;
+}
+
+.card.bottom .state-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  min-height: 24px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: 0.68rem;
+  font-weight: 700;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.15s ease, background 0.15s ease;
+}
+
+.card.bottom.correct .bottom-text-overlay {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.card.bottom.correct .state-badge {
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.78);
+}
+
+.card.bottom.locked {
+  cursor: default;
+  opacity: 0.95;
+}
+
+.card.bottom.locked .audio-btn {
+  display: none;
+}
+
+.card.bottom .text {
+  font-size: 0.76rem;
+  line-height: 1.4;
+  margin: 0;
+  color: #1f2937;
 }
 
 /* TEXTO DIDÁCTICO */
