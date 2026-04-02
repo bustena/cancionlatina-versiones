@@ -92,6 +92,11 @@ function clearTopSelection() {
 
   document.querySelectorAll(".card.top").forEach((card) => {
     card.classList.remove("active");
+
+    const badge = card.querySelector(".state-badge");
+    if (badge) {
+      badge.textContent = "";
+    }
   });
 }
 
@@ -99,7 +104,13 @@ function setTopSelection(id) {
   selectedTopId = id;
 
   document.querySelectorAll(".card.top").forEach((card) => {
-    card.classList.toggle("active", card.dataset.id === id);
+    const isActive = card.dataset.id === id;
+    card.classList.toggle("active", isActive);
+
+    const badge = card.querySelector(".state-badge");
+    if (badge) {
+      badge.textContent = isActive ? "Seleccionada" : "";
+    }
   });
 }
 
@@ -271,6 +282,11 @@ function markSolved(pairId) {
   if (topCard) {
     topCard.classList.add("locked");
     topCard.classList.remove("active");
+  
+    const badge = topCard.querySelector(".state-badge");
+    if (badge) {
+      badge.textContent = "Resuelta";
+    }
   }
 
   if (bottomCard) {
@@ -332,7 +348,7 @@ function renderTopCards() {
       <div class="card-inner">
         <div class="media">
           <img src="${pair.foto1 || ""}" alt="${escapeHtml(pair.obra || "Original")}">
-          <button class="audio-btn" type="button" aria-pressed="false">▶</button>
+          <button class="audio-btn" type="button" aria-pressed="false" aria-label="Escuchar" title="Escuchar">▶</button>
         </div>
     
         <div class="card-body">
