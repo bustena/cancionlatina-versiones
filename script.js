@@ -418,48 +418,25 @@ function renderTopCards() {
       });
     }
 
-function renderBottomCards() {
-  bottomRowEl.innerHTML = "";
+card.innerHTML = `
+  <div class="card-inner">
 
-  bottomCards.forEach((pair) => {
-    const card = document.createElement("article");
-    card.className = "card bottom";
-    card.dataset.id = pair.id;
+    <div class="media">
+      <img src="${pair.foto2 || ""}" alt="Versión">
 
-    card.innerHTML = `
-      <div class="card-inner">
-        <div class="media">
-          <img src="${pair.foto2 || ""}" alt="Versión">
-          <div class="photo-overlay"></div>
-          <div class="bottom-text-overlay"></div>
-          <div class="state-badge"></div>
-        </div>
+      <button class="audio-btn" type="button" aria-pressed="false">▶</button>
 
-        <div class="card-body">
-          <div class="bottom-meta"></div>
-          <button class="audio-btn" type="button" aria-pressed="false">Escuchar</button>
-        </div>
-      </div>
-    `;
+      <div class="bottom-text-overlay"></div>
 
-    card.addEventListener("click", (event) => {
-      if (card.classList.contains("locked")) return;
-      if (event.target.closest(".audio-btn")) return;
+      <div class="state-badge"></div>
+    </div>
 
-      tryMatch(pair.id, card);
-    });
+    <div class="card-body">
+      <div class="bottom-meta"></div>
+    </div>
 
-    const audioBtn = card.querySelector(".audio-btn");
-    audioBtn.addEventListener("click", (event) => {
-      event.stopPropagation();
-      if (card.classList.contains("locked")) return;
-
-      playRandomFragment(pair.audio2, audioBtn, `bottom-${pair.id}`);
-    });
-
-    bottomRowEl.appendChild(card);
-  });
-}
+  </div>
+`;
 
 function buildRound() {
   const shuffled = shuffle(allPairs).filter((item) => item.audio1 && item.audio2);
