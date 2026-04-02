@@ -305,27 +305,6 @@ body {
   color: #ffffff;
 }
 
-.card.bottom .audio-btn {
-  width: 100%;
-  margin: 0;
-  border: none;
-  background: #2f3440;
-  color: white;
-  border-radius: 999px;
-  padding: 8px 0;
-  font-size: 0.75rem;
-  cursor: pointer;
-  transition: background 0.15s ease, transform 0.15s ease;
-}
-
-.card.bottom .audio-btn:hover {
-  background: #1f2430;
-}
-
-.card.bottom .audio-btn.playing {
-  background: #111;
-}
-
 .card.bottom .bottom-text-overlay {
   position: absolute;
   inset: 0;
