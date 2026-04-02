@@ -52,6 +52,7 @@ function mapRow(row, index) {
     ano: normalized.ano || "",
     pais: normalized.pais || "",
     color: normalizeColor(normalized.color),
+    colorLight: lightenColor(normalizeColor(normalized.color), 0.25),
     audio1: normalized.audio1 || "",
     foto1: normalized.foto1 || "",
     audio2: normalized.audio2 || "",
@@ -291,8 +292,8 @@ function markSolved(pairId) {
 
   if (bottomCard) {
     bottomCard.classList.add("locked", "correct");
-    bottomCard.style.background = pair.color;
-    bottomCard.style.borderColor = pair.color;
+    bottomCard.style.background = pair.colorLight;
+    bottomCard.style.borderColor = pair.colorLight;
     bottomCard.innerHTML = `
       <img src="${pair.foto2 || ""}" alt="${escapeHtml(pair.obra || "Versión")}">
       <div class="card-body">
@@ -334,6 +335,20 @@ function tryMatch(bottomId, bottomCard) {
   }
 }
 
+function lightenColor(hex, amount = 0.2) {
+  const clean = hex.replace("#", "");
+
+  const r = parseInt(clean.substring(0, 2), 16);
+  const g = parseInt(clean.substring(2, 4), 16);
+  const b = parseInt(clean.substring(4, 6), 16);
+
+  const newR = Math.round(r + (255 - r) * amount);
+  const newG = Math.round(g + (255 - g) * amount);
+  const newB = Math.round(b + (255 - b) * amount);
+
+  return `rgb(${newR}, ${newG}, ${newB})`;
+}
+
 function renderTopCards() {
   topRowEl.innerHTML = "";
 
@@ -341,7 +356,7 @@ function renderTopCards() {
     const card = document.createElement("article");
     card.className = "card top";
     card.dataset.id = pair.id;
-    card.style.background = pair.color;
+    card.style.background = pair.colorLight;
     card.style.borderColor = pair.color;
 
     card.innerHTML = `
