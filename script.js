@@ -1,6 +1,10 @@
 const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSJM_fPxtlc5UEyNf0DHLNg5B4tGIm8Qbba3k78kbQDRj9a9jGpSDRHwz_UOgAz4jbpcRJKHEUe1eNY/pub?gid=1007467973&single=true&output=csv";
 
 const ROUND_SIZE = 5;
+const FRAGMENT_SECONDS = 10;
+const FADE_IN_SECONDS = 0.8;
+const FADE_OUT_SECONDS = 0.8;
+const FADE_INTERVAL_MS = 50;
 
 const topRowEl = document.getElementById("topRow");
 const bottomRowEl = document.getElementById("bottomRow");
@@ -14,10 +18,9 @@ let bottomCards = [];
 
 let selectedTopId = null;
 let solvedCount = 0;
+let listenCount = 0;
 
-let currentAudio = null;
-let currentAudioButton = null;
-let currentAudioCardId = null;
+let currentAudioState = null;
 
 function normalizeHeader(text) {
   return String(text || "")
@@ -68,57 +71,20 @@ function shuffle(array) {
   return copy;
 }
 
-function stopCurrentAudio() {
-  if (currentAudio) {
-    currentAudio.pause();
-    currentAudio.currentTime = 0;
-    currentAudio = null;
-  }
-
-  if (currentAudioButton) {
-    currentAudioButton.classList.remove("playing");
-    currentAudioButton.textContent = "Escuchar";
-    currentAudioButton.setAttribute("aria-pressed", "false");
-    currentAudioButton = null;
-  }
-
-  currentAudioCardId = null;
-}
-
-function playAudio(url, button, cardId) {
-  if (!url) return;
-
-  if (currentAudio && currentAudioCardId === cardId) {
-    stopCurrentAudio();
-    return;
-  }
-
-  stopCurrentAudio();
-
-  const audio = new Audio(url);
-  currentAudio = audio;
-  currentAudioButton = button;
-  currentAudioCardId = cardId;
-
-  button.classList.add("playing");
-  button.textContent = "Detener";
-  button.setAttribute("aria-pressed", "true");
-
-  audio.addEventListener("ended", () => {
-    stopCurrentAudio();
-  });
-
-  audio.addEventListener("error", () => {
-    stopCurrentAudio();
-  });
-
-  audio.play().catch(() => {
-    stopCurrentAudio();
+function escapeHtml(text) {
+  return String(text || "").replace(/[&<>"']/g, (m) => {
+    return {
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#039;"
+    }[m];
   });
 }
 
 function updateProgress() {
-  progressEl.textContent = `${solvedCount}/${roundPairs.length}`;
+  progressEl.textContent = `${solvedCount}/${roundPairs.length} · escuchas: ${listenCount}`;
 }
 
 function clearTopSelection() {
@@ -134,6 +100,160 @@ function setTopSelection(id) {
 
   document.querySelectorAll(".card.top").forEach((card) => {
     card.classList.toggle("active", card.dataset.id === id);
+  });
+}
+
+function resetAudioButton(button) {
+  if (!button) return;
+  button.classList.remove("playing");
+  button.textContent = "Escuchar";
+  button.setAttribute("aria-pressed", "false");
+}
+
+function setAudioButtonPlaying(button) {
+  if (!button) return;
+  button.classList.add("playing");
+  button.textContent = "Detener";
+  button.setAttribute("aria-pressed", "true");
+}
+
+function cleanupCurrentAudioState() {
+  if (!currentAudioState) return;
+
+  if (currentAudioState.fadeInterval) {
+    clearInterval(currentAudioState.fadeInterval);
+  }
+
+  if (currentAudioState.stopTimer) {
+    clearTimeout(currentAudioState.stopTimer);
+  }
+
+  if (currentAudioState.audio) {
+    currentAudioState.audio.pause();
+    currentAudioState.audio.src = "";
+  }
+
+  resetAudioButton(currentAudioState.button);
+  currentAudioState = null;
+}
+
+function stopCurrentAudio() {
+  cleanupCurrentAudioState();
+}
+
+function getRandomStartTime(duration, fragmentLength) {
+  if (!Number.isFinite(duration) || duration <= fragmentLength) return 0;
+  const maxStart = Math.max(0, duration - fragmentLength);
+  return Math.random() * maxStart;
+}
+
+function fadeVolume(audio, from, to, durationSeconds, onComplete) {
+  if (!audio || !Number.isFinite(durationSeconds) || durationSeconds <= 0) {
+    if (audio) audio.volume = to;
+    if (typeof onComplete === "function") onComplete();
+    return null;
+  }
+
+  const steps = Math.max(1, Math.round((durationSeconds * 1000) / FADE_INTERVAL_MS));
+  const delta = (to - from) / steps;
+  let currentStep = 0;
+
+  audio.volume = from;
+
+  const intervalId = setInterval(() => {
+    currentStep += 1;
+    audio.volume = Math.max(0, Math.min(1, from + delta * currentStep));
+
+    if (currentStep >= steps) {
+      clearInterval(intervalId);
+      audio.volume = to;
+      if (typeof onComplete === "function") onComplete();
+    }
+  }, FADE_INTERVAL_MS);
+
+  return intervalId;
+}
+
+function playRandomFragment(url, button, cardId) {
+  if (!url || !button || !cardId) return;
+
+  const sameCardIsPlaying =
+    currentAudioState &&
+    currentAudioState.cardId === cardId;
+
+  if (sameCardIsPlaying) {
+    stopCurrentAudio();
+    return;
+  }
+
+  stopCurrentAudio();
+
+  const audio = new Audio();
+  audio.preload = "metadata";
+  audio.src = url;
+
+  const state = {
+    audio,
+    button,
+    cardId,
+    fadeInterval: null,
+    stopTimer: null,
+    ending: false
+  };
+
+  currentAudioState = state;
+  setAudioButtonPlaying(button);
+
+  audio.addEventListener("loadedmetadata", () => {
+    if (currentAudioState !== state) return;
+
+    const duration = Number.isFinite(audio.duration) ? audio.duration : 0;
+    const fragmentLength = Math.min(FRAGMENT_SECONDS, duration || FRAGMENT_SECONDS);
+
+    const startTime = getRandomStartTime(duration, fragmentLength);
+    const effectiveDuration = duration > 0
+      ? Math.min(fragmentLength, Math.max(0.2, duration - startTime))
+      : FRAGMENT_SECONDS;
+
+    const fadeIn = Math.min(FADE_IN_SECONDS, effectiveDuration / 3);
+    const fadeOut = Math.min(FADE_OUT_SECONDS, effectiveDuration / 3);
+    const mainPlayTime = Math.max(0, effectiveDuration - fadeIn - fadeOut);
+
+    audio.currentTime = startTime;
+    audio.volume = 0;
+
+    audio.play()
+      .then(() => {
+        if (currentAudioState !== state) return;
+
+        listenCount += 1;
+        updateProgress();
+
+        state.fadeInterval = fadeVolume(audio, 0, 1, fadeIn, () => {
+          if (currentAudioState !== state) return;
+
+          state.stopTimer = setTimeout(() => {
+            if (currentAudioState !== state || state.ending) return;
+
+            state.ending = true;
+            state.fadeInterval = fadeVolume(audio, audio.volume, 0, fadeOut, () => {
+              if (currentAudioState !== state) return;
+              cleanupCurrentAudioState();
+            });
+          }, mainPlayTime * 1000);
+        });
+      })
+      .catch(() => {
+        if (currentAudioState === state) {
+          cleanupCurrentAudioState();
+        }
+      });
+  });
+
+  audio.addEventListener("error", () => {
+    if (currentAudioState === state) {
+      cleanupCurrentAudioState();
+    }
   });
 }
 
@@ -194,18 +314,6 @@ function tryMatch(bottomId, bottomCard) {
   }
 }
 
-function escapeHtml(text) {
-  return String(text || "").replace(/[&<>"']/g, (m) => {
-    return {
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      '"': "&quot;",
-      "'": "&#039;"
-    }[m];
-  });
-}
-
 function renderTopCards() {
   topRowEl.innerHTML = "";
 
@@ -240,7 +348,7 @@ function renderTopCards() {
         stopCurrentAudio();
       } else {
         setTopSelection(pair.id);
-        playAudio(pair.audio1, audioBtn, `top-${pair.id}`);
+        playRandomFragment(pair.audio1, audioBtn, `top-${pair.id}`);
       }
     });
 
@@ -253,7 +361,7 @@ function renderTopCards() {
         setTopSelection(pair.id);
       }
 
-      playAudio(pair.audio1, audioBtn, `top-${pair.id}`);
+      playRandomFragment(pair.audio1, audioBtn, `top-${pair.id}`);
     });
 
     topRowEl.appendChild(card);
@@ -287,7 +395,7 @@ function renderBottomCards() {
       event.stopPropagation();
       if (card.classList.contains("locked")) return;
 
-      playAudio(pair.audio2, audioBtn, `bottom-${pair.id}`);
+      playRandomFragment(pair.audio2, audioBtn, `bottom-${pair.id}`);
     });
 
     bottomRowEl.appendChild(card);
@@ -314,6 +422,7 @@ function buildRound() {
 
   solvedCount = 0;
   selectedTopId = null;
+  listenCount = 0;
   stopCurrentAudio();
   updateProgress();
 
