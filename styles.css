@@ -86,6 +86,27 @@ body {
   display: block;
 }
 
+/* BADGE GENERAL */
+
+.state-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  min-height: 24px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: 0.68rem;
+  font-weight: 700;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.15s ease, background 0.15s ease;
+}
+
 /* SUPERIORES */
 
 .card.top {
@@ -131,8 +152,6 @@ body {
   color: rgba(255, 255, 255, 0.82);
 }
 
-/* botón de audio solo para superiores */
-
 .card.top .audio-btn {
   position: absolute;
   bottom: 8px;
@@ -162,8 +181,6 @@ body {
   background: rgba(0, 0, 0, 0.9);
 }
 
-/* seleccionada */
-
 .card.top.active {
   transform: translateY(-3px) scale(1.02);
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
@@ -176,27 +193,6 @@ body {
   border-radius: inherit;
   border: 2px solid rgba(255, 255, 255, 0.92);
   pointer-events: none;
-}
-
-/* badge visual */
-
-.state-badge {
-  position: absolute;
-  top: 8px;
-  left: 8px;
-  min-height: 24px;
-  padding: 4px 8px;
-  border-radius: 999px;
-  background: rgba(0, 0, 0, 0.6);
-  color: #fff;
-  font-size: 0.68rem;
-  font-weight: 700;
-  line-height: 1;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transition: opacity 0.15s ease, background 0.15s ease;
 }
 
 .card.top.active .state-badge {
@@ -214,8 +210,6 @@ body {
   opacity: 1;
   background: rgba(0, 0, 0, 0.78);
 }
-
-/* INFERIORES */
 
 /* INFERIORES */
 
@@ -240,13 +234,6 @@ body {
 
 .card.bottom .media {
   position: relative;
-}
-
-.card.bottom img {
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  object-fit: cover;
-  display: block;
 }
 
 .card.bottom .photo-overlay {
@@ -290,6 +277,9 @@ body {
 .card.bottom .interprete {
   font-size: 0.8rem;
   line-height: 1.35;
+}
+
+.card.bottom.correct .interprete {
   color: #ffffff;
 }
 
@@ -312,25 +302,6 @@ body {
 
 .card.bottom .audio-btn.playing {
   background: #111;
-}
-
-.card.bottom .state-badge {
-  position: absolute;
-  top: 8px;
-  left: 8px;
-  min-height: 24px;
-  padding: 4px 8px;
-  border-radius: 999px;
-  background: rgba(0, 0, 0, 0.6);
-  color: #fff;
-  font-size: 0.68rem;
-  font-weight: 700;
-  line-height: 1;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transition: opacity 0.15s ease, background 0.15s ease;
 }
 
 .card.bottom.correct .bottom-text-overlay {
@@ -357,14 +328,6 @@ body {
   line-height: 1.4;
   margin: 0;
   color: #1f2937;
-}
-
-/* TEXTO DIDÁCTICO */
-
-.text {
-  font-size: 0.75rem;
-  margin-top: 8px;
-  line-height: 1.4;
 }
 
 /* FEEDBACK */
