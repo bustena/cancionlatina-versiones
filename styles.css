@@ -213,6 +213,34 @@ body {
 
 /* INFERIORES */
 
+.card.bottom .audio-btn {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  border: none;
+  background: rgba(0,0,0,0.55);
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: background 0.15s ease;
+}
+
+.card.bottom .audio-btn:hover {
+  background: rgba(0,0,0,0.75);
+}
+
+.card.bottom .audio-btn.playing {
+  background: rgba(0,0,0,0.9);
+}
+
 .card.bottom {
   background: #eef1f5;
   border: none;
@@ -236,13 +264,6 @@ body {
   position: relative;
 }
 
-.card.bottom .photo-overlay {
-  position: absolute;
-  inset: 0;
-  background: transparent;
-  pointer-events: none;
-}
-
 .card.bottom .bottom-text-overlay {
   position: absolute;
   left: 10px;
@@ -263,7 +284,7 @@ body {
 .card.bottom .card-body {
   padding: 12px;
   background: #dfe5ec;
-  transition: background 0.2s ease;
+  border-top: none;
 }
 
 .card.bottom .bottom-meta {
@@ -304,9 +325,23 @@ body {
   background: #111;
 }
 
-.card.bottom.correct .bottom-text-overlay {
-  opacity: 1;
-  transform: translateY(0);
+.card.bottom .bottom-text-overlay {
+  position: absolute;
+  inset: 0;
+  padding: 14px;
+
+  display: flex;
+  align-items: flex-end;
+
+  background: linear-gradient(
+    to top,
+    rgba(255,255,255,0.85) 0%,
+    rgba(255,255,255,0.6) 40%,
+    rgba(255,255,255,0) 70%
+  );
+
+  opacity: 0;
+  transition: opacity 0.2s ease;
 }
 
 .card.bottom.correct .state-badge {
