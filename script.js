@@ -464,10 +464,6 @@ function renderBottomCards() {
 }
 
 function buildRound() {
-  // ...
-}
-
-function buildRound() {
   const shuffled = shuffle(allPairs).filter((item) => item.audio1 && item.audio2);
   roundPairs = shuffled.slice(0, Math.min(ROUND_SIZE, shuffled.length));
 
