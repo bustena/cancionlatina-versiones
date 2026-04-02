@@ -384,13 +384,13 @@ function renderTopCards() {
           <img src="${pair.foto1 || ""}" alt="${escapeHtml(pair.obra || "Original")}">
           <button class="audio-btn" type="button" aria-pressed="false" aria-label="Escuchar" title="Escuchar">▶</button>
         </div>
-    
+
         <div class="card-body">
           <div class="author">${escapeHtml(pair.autor)}</div>
           <div class="work">${escapeHtml(pair.obra)}</div>
           <div class="meta">${escapeHtml(pair.ano)} · ${escapeHtml(pair.pais)}</div>
         </div>
-    
+
         <div class="state-badge"></div>
       </div>
     `;
@@ -398,45 +398,74 @@ function renderTopCards() {
     card.addEventListener("click", (event) => {
       if (card.classList.contains("locked")) return;
       if (event.target.closest(".audio-btn")) return;
-    
+
       if (selectedTopId === pair.id) {
         clearTopSelection();
       } else {
         setTopSelection(pair.id);
       }
     });
-    
+
     const audioBtn = card.querySelector(".audio-btn");
     audioBtn.addEventListener("click", (event) => {
       event.stopPropagation();
       if (card.classList.contains("locked")) return;
-    
+
       playRandomFragment(pair.audio1, audioBtn, `top-${pair.id}`);
     });
-    
-        topRowEl.appendChild(card);
-      });
-    }
 
-card.innerHTML = `
-  <div class="card-inner">
+    topRowEl.appendChild(card);
+  });
+}
 
-    <div class="media">
-      <img src="${pair.foto2 || ""}" alt="Versión">
+function renderBottomCards() {
+  bottomRowEl.innerHTML = "";
 
-      <button class="audio-btn" type="button" aria-pressed="false">▶</button>
+  bottomCards.forEach((pair) => {
+    const card = document.createElement("article");
+    card.className = "card bottom";
+    card.dataset.id = pair.id;
 
-      <div class="bottom-text-overlay"></div>
+    card.innerHTML = `
+      <div class="card-inner">
+        <div class="media">
+          <img src="${pair.foto2 || ""}" alt="Versión">
 
-      <div class="state-badge"></div>
-    </div>
+          <button class="audio-btn" type="button" aria-pressed="false" aria-label="Escuchar" title="Escuchar">▶</button>
 
-    <div class="card-body">
-      <div class="bottom-meta"></div>
-    </div>
+          <div class="bottom-text-overlay"></div>
 
-  </div>
-`;
+          <div class="state-badge"></div>
+        </div>
+
+        <div class="card-body">
+          <div class="bottom-meta"></div>
+        </div>
+      </div>
+    `;
+
+    card.addEventListener("click", (event) => {
+      if (card.classList.contains("locked")) return;
+      if (event.target.closest(".audio-btn")) return;
+
+      tryMatch(pair.id, card);
+    });
+
+    const audioBtn = card.querySelector(".audio-btn");
+    audioBtn.addEventListener("click", (event) => {
+      event.stopPropagation();
+      if (card.classList.contains("locked")) return;
+
+      playRandomFragment(pair.audio2, audioBtn, `bottom-${pair.id}`);
+    });
+
+    bottomRowEl.appendChild(card);
+  });
+}
+
+function buildRound() {
+  // ...
+}
 
 function buildRound() {
   const shuffled = shuffle(allPairs).filter((item) => item.audio1 && item.audio2);
