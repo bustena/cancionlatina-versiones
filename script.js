@@ -57,7 +57,8 @@ function mapRow(row, index) {
     foto1: normalized.foto1 || "",
     audio2: normalized.audio2 || "",
     foto2: normalized.foto2 || "",
-    texto: normalized.texto || ""
+    texto: normalized.texto || "",
+    interprete: normalized.interprete || ""
   };
 }
 
@@ -292,14 +293,32 @@ function markSolved(pairId) {
 
   if (bottomCard) {
     bottomCard.classList.add("locked", "correct");
-    bottomCard.style.background = pair.colorLight;
     bottomCard.style.borderColor = pair.colorLight;
-    bottomCard.innerHTML = `
-      <img src="${pair.foto2 || ""}" alt="${escapeHtml(pair.obra || "Versión")}">
-      <div class="card-body">
+  
+    const body = bottomCard.querySelector(".card-body");
+    const meta = bottomCard.querySelector(".bottom-meta");
+    const overlay = bottomCard.querySelector(".bottom-text-overlay");
+    const badge = bottomCard.querySelector(".state-badge");
+  
+    if (body) {
+      body.style.background = pair.colorLight;
+    }
+  
+    if (meta) {
+      meta.innerHTML = pair.interprete
+        ? `<div class="interprete">${pair.interprete}</div>`
+        : `<div class="interprete">Versión identificada</div>`;
+    }
+  
+    if (overlay) {
+      overlay.innerHTML = `
         <div class="text">${escapeHtml(pair.texto || "Emparejado correctamente.")}</div>
-      </div>
-    `;
+      `;
+    }
+  
+    if (badge) {
+      badge.textContent = "Resuelta";
+    }
   }
 
   solvedCount += 1;
@@ -408,9 +427,18 @@ function renderBottomCards() {
     card.dataset.id = pair.id;
 
     card.innerHTML = `
-      <img src="${pair.foto2 || ""}" alt="Versión">
-      <div class="card-body">
-        <button class="audio-btn" type="button" aria-pressed="false">Escuchar</button>
+      <div class="card-inner">
+        <div class="media">
+          <img src="${pair.foto2 || ""}" alt="Versión">
+          <div class="photo-overlay"></div>
+          <div class="bottom-text-overlay"></div>
+          <div class="state-badge"></div>
+        </div>
+
+        <div class="card-body">
+          <div class="bottom-meta"></div>
+          <button class="audio-btn" type="button" aria-pressed="false">Escuchar</button>
+        </div>
       </div>
     `;
 
