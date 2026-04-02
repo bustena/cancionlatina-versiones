@@ -325,12 +325,19 @@ function renderTopCards() {
     card.style.borderColor = pair.color;
 
     card.innerHTML = `
-      <img src="${pair.foto1 || ""}" alt="${escapeHtml(pair.obra || "Original")}">
-      <div class="card-body">
-        <div class="author">${escapeHtml(pair.autor)}</div>
-        <div class="work">${escapeHtml(pair.obra)}</div>
-        <div class="meta">${escapeHtml(pair.ano)} · ${escapeHtml(pair.pais)}</div>
-        <button class="audio-btn" type="button" aria-pressed="false">Escuchar</button>
+      <div class="card-inner">
+        <div class="media">
+          <img src="${pair.foto1 || ""}" alt="${escapeHtml(pair.obra || "Original")}">
+          <button class="audio-btn" type="button" aria-pressed="false">▶</button>
+        </div>
+    
+        <div class="card-body">
+          <div class="author">${escapeHtml(pair.autor)}</div>
+          <div class="work">${escapeHtml(pair.obra)}</div>
+          <div class="meta">${escapeHtml(pair.ano)} · ${escapeHtml(pair.pais)}</div>
+        </div>
+    
+        <div class="state-badge"></div>
       </div>
     `;
 
