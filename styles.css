@@ -62,54 +62,22 @@ body {
   gap: 14px;
 }
 
-/* TARJETAS */
+/* TARJETAS BASE */
 
 .card {
   border-radius: var(--radius);
   background: var(--card);
   border: 1px solid var(--border);
   overflow: hidden;
-  cursor: pointer;
   transition: all 0.15s ease;
   position: relative;
 }
 
 .card.locked {
   cursor: default;
-  opacity: 0.9;
 }
 
-.card.active {
-  outline: 3px solid #2f3440;
-}
-
-.card.top {
-  border: none;
-  color: #ffffff;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
-  transform: translateY(0);
-  transition: all 0.18s ease;
-  overflow: hidden;
-}
-
-.card.top .media {
-  position: relative;
-}
-
-.card.top img {
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  object-fit: cover;
-  display: block;
-}
-
-.card.top .card-inner {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
-/* IMÁGENES */
+/* IMAGEN BASE */
 
 .card img {
   width: 100%;
@@ -118,26 +86,52 @@ body {
   display: block;
 }
 
-/* CONTENIDO */
+/* SUPERIORES */
 
-.card-body {
-  padding: 10px;
+.card.top {
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  transform: translateY(0);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
 }
 
-.author {
+.card.top:hover {
+  transform: translateY(-2px);
+}
+
+.card.top .card-inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.card.top .media {
+  position: relative;
+}
+
+.card.top .card-body {
+  padding: 10px 12px 12px;
+}
+
+.card.top .author {
   font-weight: 700;
   font-size: 0.85rem;
+  color: #ffffff;
 }
 
-.work {
+.card.top .work {
   font-size: 0.85rem;
-  color: var(--muted);
+  color: rgba(255, 255, 255, 0.96);
 }
 
-.meta {
+.card.top .meta {
   font-size: 0.75rem;
-  color: var(--muted);
+  color: rgba(255, 255, 255, 0.82);
 }
+
+/* botón de audio solo para superiores */
 
 .card.top .audio-btn {
   position: absolute;
@@ -145,66 +139,34 @@ body {
   right: 8px;
   width: 34px;
   height: 34px;
-  border-radius: 999px;
+  margin: 0;
+  padding: 0;
   border: none;
-  background: rgba(0,0,0,0.55);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.55);
   color: #fff;
   font-size: 14px;
+  line-height: 1;
   cursor: pointer;
-  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease, transform 0.15s ease;
 }
 
 .card.top .audio-btn:hover {
-  background: rgba(0,0,0,0.75);
+  background: rgba(0, 0, 0, 0.75);
 }
 
 .card.top .audio-btn.playing {
-  background: rgba(0,0,0,0.9);
+  background: rgba(0, 0, 0, 0.9);
 }
 
-.card.top .card-body {
-  padding: 10px 12px 12px;
-}
-
-.card.top .author {
-  font-weight: 700;
-  font-size: 0.85rem;
-  color: #ffffff;
-}
-
-.card.top .work {
-  font-size: 0.85rem;
-  opacity: 0.95;
-}
-
-.card.top .meta {
-  font-size: 0.75rem;
-  opacity: 0.8;
-}
-
-.card.top .card-body {
-  padding: 10px 12px 12px;
-}
-
-.card.top .author {
-  font-weight: 700;
-  font-size: 0.85rem;
-  color: #ffffff;
-}
-
-.card.top .work {
-  font-size: 0.85rem;
-  opacity: 0.95;
-}
-
-.card.top .meta {
-  font-size: 0.75rem;
-  opacity: 0.8;
-}
+/* seleccionada */
 
 .card.top.active {
   transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 10px 24px rgba(0,0,0,0.18);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
 }
 
 .card.top.active::after {
@@ -212,27 +174,61 @@ body {
   position: absolute;
   inset: -3px;
   border-radius: inherit;
-  border: 2px solid rgba(255,255,255,0.9);
+  border: 2px solid rgba(255, 255, 255, 0.92);
   pointer-events: none;
 }
 
-.card.top.active .state-badge {
-  content: "Seleccionada";
-  opacity: 1;
+/* badge visual */
+
+.state-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  min-height: 24px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: 0.68rem;
+  font-weight: 700;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.15s ease, background 0.15s ease;
 }
 
 .card.top.active .state-badge {
-  content: "Seleccionada";
   opacity: 1;
 }
 
-.card.top:hover {
-  transform: translateY(-2px);
+.card.top.locked {
+  opacity: 0.72;
+  box-shadow: none;
+  transform: none;
+  cursor: default;
 }
 
-/* BOTÓN AUDIO */
+.card.top.locked .state-badge {
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.78);
+}
 
-.audio-btn {
+/* INFERIORES */
+
+.card.bottom {
+  background: #e5e9f0;
+  cursor: pointer;
+}
+
+.card.bottom.correct {
+  color: white;
+}
+
+/* botón general para inferiores */
+
+.card.bottom .audio-btn {
   margin-top: 8px;
   width: 100%;
   border: none;
@@ -244,18 +240,8 @@ body {
   cursor: pointer;
 }
 
-.audio-btn.playing {
+.card.bottom .audio-btn.playing {
   background: #111;
-}
-
-/* INFERIORES */
-
-.card.bottom {
-  background: #e5e9f0;
-}
-
-.card.bottom.correct {
-  color: white;
 }
 
 /* TEXTO DIDÁCTICO */
