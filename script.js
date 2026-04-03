@@ -27,7 +27,6 @@ let currency = "$";
 
 let correctMatches = 0;
 let wrongAttempts = 0;
-let listenCount = 0;
 
 let roundNumber = 1;
 let usedPairIds = new Set();
@@ -365,7 +364,7 @@ function markSolved(pairId) {
 
   if (solvedCount === roundPairs.length) {
     setTimeout(() => {
-      alert("Ronda completada");
+      onRoundComplete();
     }, 150);
   }
 }
@@ -563,7 +562,7 @@ function showFinalScreen() {
 }
 
 function getRemainingPairs() {
-  return roundPairs.filter(pair => !solvedPairs.has(pair.id)).length;
+  return roundPairs.length - solvedCount;
 }
 
 function penalizeListen() {
