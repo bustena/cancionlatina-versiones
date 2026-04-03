@@ -148,7 +148,7 @@ function flashHUD(type) {
 
   setTimeout(() => {
     hud.classList.remove(className);
-  }, 220);
+  }, 380);
 }
 
 function animateHUDValue(targetBalance, delta = 0) {
