@@ -312,14 +312,6 @@ body {
   pointer-events: none;
 }
 
-.card.bottom .bottom-text-overlay .text {
-  font-size: 0.76rem;
-  line-height: 1.38;
-  color: #1f2937;
-  margin: 0;
-  width: 100%;
-}
-
 .card.bottom .card-body {
   padding: 12px;
   background: transparent;
