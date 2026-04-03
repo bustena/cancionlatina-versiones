@@ -320,7 +320,7 @@ function markSolved(pairId) {
   if (topCard) {
     topCard.classList.add("locked");
     topCard.classList.remove("active");
-  
+
     const badge = topCard.querySelector(".state-badge");
     if (badge) {
       badge.textContent = "Resuelta";
@@ -330,28 +330,29 @@ function markSolved(pairId) {
   if (bottomCard) {
     bottomCard.classList.add("locked", "correct");
     bottomCard.style.borderColor = pair.colorLight;
-  
+    bottomCard.style.background = pair.colorLight;
+
     const body = bottomCard.querySelector(".card-body");
     const meta = bottomCard.querySelector(".bottom-meta");
     const overlay = bottomCard.querySelector(".bottom-text-overlay");
     const badge = bottomCard.querySelector(".state-badge");
-  
+
     if (body) {
-      body.style.background = pair.colorLight;
+      body.style.background = "transparent";
     }
-  
+
     if (meta) {
       meta.innerHTML = pair.interprete
         ? `<div class="interprete">${pair.interprete}</div>`
         : `<div class="interprete">Versión identificada</div>`;
     }
-  
+
     if (overlay) {
       overlay.innerHTML = `
         <div class="text">${pair.texto || "Emparejado correctamente."}</div>
       `;
     }
-  
+
     if (badge) {
       badge.textContent = "Resuelta";
     }
