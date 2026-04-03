@@ -173,7 +173,7 @@ function showOverlayScreen(type) {
 
   if (type === "intro") {
     kicker = "";
-    title = "RONDA 1";
+    title = "RONDA 1/2";
     text = `
       <p>Escucha y empareja las <strong class="core">obras de la fila superior</strong> con las <strong class="core">versiones de la fila inferior</strong>.</p>
       <p>Comenzarás con <strong class="core">100 ${currencyName} ${currencyEmoji}</strong>, que podrás <strong class="gain">incrementar</strong> o <strong class="loss">perder</strong> según tus aciertos y errores.</p>
@@ -184,7 +184,7 @@ function showOverlayScreen(type) {
 
   if (type === "round2") {
     kicker = "";
-    title = "RONDA 2";
+    title = "RONDA 2/2";
     text = `
       <p>En esta ronda, los <strong class="gain">aciertos valen más</strong> y los <strong class="loss">errores penalizan más</strong>.</p>
     `;
@@ -196,7 +196,7 @@ function showOverlayScreen(type) {
     title = "RESULTADOS";
     text = `
       <p>Saldo final: <strong class="core">${currency}${balance}</strong></p>
-      <p>Aciertos: <strong class="gain">${correctMatches}</strong> · Errores: <strong class="loss">${wrongAttempts}</strong></p>
+      <p>Errores: <strong class="loss">${wrongAttempts}</strong></p>
     `;
     buttonLabel = "Cerrar";
   }
