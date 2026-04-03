@@ -435,6 +435,8 @@ function renderBottomCards() {
     const card = document.createElement("article");
     card.className = "card bottom";
     card.dataset.id = pair.id;
+    card.style.background = "";
+    card.style.borderColor = "";
 
     card.innerHTML = `
       <div class="card-inner">
