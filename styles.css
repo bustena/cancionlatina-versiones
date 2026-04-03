@@ -324,7 +324,14 @@ body {
 
 .card.bottom.locked {
   cursor: default;
-  opacity: 0.95;
+  opacity: 0.78;
+  transform: none;
+  box-shadow: none;
+  pointer-events: none;
+}
+
+.card.bottom.locked:hover {
+  transform: none;
 }
 
 .card.bottom.locked .audio-btn {
