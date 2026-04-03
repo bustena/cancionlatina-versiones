@@ -30,6 +30,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 32px;
 }
 
 .header h1 {
@@ -52,17 +53,30 @@ body {
   font-weight: 700;
   letter-spacing: 0.02em;
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
-  transition: transform 0.15s ease, background 0.2s ease;
+  transition: transform 0.18s ease, background 0.2s ease;
 }
 
+/* GANANCIA */
 .hud.flash-green {
-  background: linear-gradient(135deg, #16a34a, #22c55e);
-  transform: scale(1.08);
+  background: linear-gradient(135deg, #15803d, #22c55e);
+  transform: scale(1.06);
 }
 
+/* PÉRDIDA */
 .hud.flash-red {
-  background: linear-gradient(135deg, #b91c1c, #ef4444);
-  transform: scale(1.08);
+  background: linear-gradient(135deg, #991b1b, #ef4444);
+  transform: scale(1.06);
+}
+
+.hud.flash-green,
+.hud.flash-red {
+  animation: hudPulse 0.25s ease;
+}
+
+@keyframes hudPulse {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.08); }
+  100% { transform: scale(1); }
 }
 
 /* FILAS */
