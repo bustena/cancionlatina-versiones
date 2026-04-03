@@ -77,7 +77,7 @@ body {
 .hud.flash-green,
 .hud.flash-red,
 .hud.flash-listen {
-  animation: hudPulse 0.25s ease;
+  animation: hudPulse 0.40s ease;
 }
 
 @keyframes hudPulse {
