@@ -54,7 +54,7 @@ body {
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.02em;
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
-  transition: transform 0.18s ease, background 0.2s ease;
+  transition: transform 0.18s ease, background 0.2s ease, opacity 0.2s ease;
 }
 
 /* GANANCIA */
