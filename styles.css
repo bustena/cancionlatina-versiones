@@ -236,7 +236,7 @@ body {
 }
 
 .card.bottom {
-  background: #eef1f5;
+  background: #828282;
   border: none;
   cursor: pointer;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
@@ -277,7 +277,7 @@ body {
 
 .card.bottom .card-body {
   padding: 12px;
-  background: #828282;
+  background: transparent;
   transition: background 0.2s ease;
 }
 
@@ -286,7 +286,7 @@ body {
   margin-bottom: 10px;
   font-size: 0.8rem;
   line-height: 1.35;
-  color: #374151;
+  color: #f1f5f9;
 }
 
 .card.bottom .interprete {
