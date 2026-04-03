@@ -134,7 +134,11 @@ function flashHUD(type) {
   const hud = document.getElementById("hud");
   if (!hud) return;
 
-  const className = type === "gain" ? "flash-green" : "flash-red";
+  let className = "";
+
+  if (type === "gain") className = "flash-green";
+  else if (type === "loss") className = "flash-red";
+  else if (type === "listen") className = "flash-listen";
 
   hud.classList.add(className);
 
@@ -583,10 +587,13 @@ function getRemainingPairs() {
 }
 
 function penalizeListen() {
-  balance -= 1;
+  const cost = 1;
+
+  balance -= cost;
   listenCount++;
-  updateHUD();
-  flashHUD("loss");
+
+  updateHUD(-cost);
+  flashHUD("listen");
 }
 
 function penalizeError(remaining) {
@@ -601,24 +608,40 @@ function penalizeError(remaining) {
   balance -= penalty;
   wrongAttempts++;
 
-  updateHUD();
+  updateHUD(-penalty);
   flashHUD("loss");
+
+  soundLoss.currentTime = 0;
   soundLoss.play();
 }
 
 function rewardSuccess() {
-  balance += 2;
+  const gain = 2;
+
+  balance += gain;
   correctMatches++;
-  updateHUD();
+
+  updateHUD(gain);
   flashHUD("gain");
+
+  soundGain.currentTime = 0;
   soundGain.play();
 }
 
-function updateHUD() {
+let lastDelta = 0;
+
+function updateHUD(delta = 0) {
   const hud = document.getElementById("hud");
   if (!hud) return;
 
-  hud.textContent = `${currency}${balance}`;
+  lastDelta = delta;
+
+  const sign = delta > 0 ? "+" : "";
+  const deltaText = delta !== 0 ? `${sign}${delta}` : "";
+
+  hud.textContent = delta !== 0
+    ? `${deltaText} | ${currency}${balance}`
+    : `${currency}${balance}`;
 }
 
 function loadCSV() {
