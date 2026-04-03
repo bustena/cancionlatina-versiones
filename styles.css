@@ -24,6 +24,33 @@ body {
   padding: 20px;
 }
 
+.overlay.overlay-loading {
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.overlay.overlay-loading .overlay-card {
+  background: transparent;
+  box-shadow: none;
+  max-width: 420px;
+  padding: 24px;
+  text-align: center;
+}
+
+.overlay.overlay-loading .overlay-kicker,
+.overlay.overlay-loading .overlay-text,
+.overlay.overlay-loading .overlay-button {
+  display: none;
+}
+
+.overlay.overlay-loading .overlay-title {
+  margin: 0;
+  font-size: 2rem;
+  text-align: center;
+  color: #374151;
+}
+
 .overlay {
   position: fixed;
   inset: 0;
