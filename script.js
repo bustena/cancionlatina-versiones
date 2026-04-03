@@ -83,7 +83,8 @@ function mapRow(row, index) {
     audio2: normalized.audio2 || "",
     foto2: normalized.foto2 || "",
     texto: normalized.texto || "",
-    interprete: normalized.interprete || ""
+    interprete: normalized.interprete || "",
+    ano_interprete: normalized.ano_interprete || ""
   };
 }
 
@@ -342,9 +343,16 @@ function markSolved(pairId) {
     }
 
     if (meta) {
-      meta.innerHTML = pair.interprete
-        ? `<div class="interprete">${pair.interprete}</div>`
-        : `<div class="interprete">Versión identificada</div>`;
+      if (pair.interprete || pair.ano_interprete) {
+        meta.innerHTML = `
+          <div class="interprete">
+            ${pair.interprete || "Versión identificada"}
+            ${pair.ano_interprete ? ` <span class="ano-interprete">(${pair.ano_interprete})</span>` : ""}
+          </div>
+        `;
+      } else {
+        meta.innerHTML = `<div class="interprete">Versión identificada</div>`;
+      }
     }
 
     if (overlay) {
@@ -478,7 +486,9 @@ function renderBottomCards() {
         </div>
 
         <div class="card-body">
-          <div class="bottom-meta"></div>
+          <div class="bottom-meta">
+            ${pair.interprete ? `<div class="interprete">${pair.interprete}</div>` : ""}
+          </div>
         </div>
       </div>
     `;
