@@ -103,13 +103,14 @@ body {
 
 .overlay-text {
   text-align: center;
-  font-size: 1rem;
+  font-size: 1.08rem;
   line-height: 1.6;
   color: #374151;
 }
 
 .overlay-text p {
-  margin: 0 0 10px;
+  margin: 0 0 12px;
+  font-size: inherit;
 }
 
 .overlay-text strong.gain {
@@ -142,15 +143,6 @@ body {
 .overlay-button:hover {
   background: #111827;
   transform: translateY(-1px);
-}
-
-.overlay-text p strong.core {
-  font-size: 1.4rem;
-}
-
-.overlay-text p strong.gain,
-.overlay-text p strong.loss {
-  font-size: 1.2rem;
 }
 
 .overlay-title + .overlay-text p:first-child {
