@@ -605,7 +605,7 @@ function updateHUD() {
   const hud = document.getElementById("hud");
   if (!hud) return;
 
-  hud.textContent = `${currency}${balance} · ✔ ${correctMatches} · ✖ ${wrongAttempts}`;
+  hud.textContent = `${currency}${balance}`;
 }
 
 function loadCSV() {
