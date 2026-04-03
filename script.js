@@ -56,17 +56,6 @@ let hudTimeout = null;
 let displayedBalance = 100;
 let hudCountInterval = null;
 
-const currencies = [
-  { symbol: "$", name: "dólares" },
-  { symbol: "$", name: "pesos" },
-  { symbol: "S/", name: "soles" },
-  { symbol: "Bs", name: "bolívares" },
-  { symbol: "Gs", name: "guaraníes" },
-  { symbol: "L", name: "lempiras" },
-  { symbol: "Q", name: "quetzales" },
-  { symbol: "C$", name: "córdobas" }
-];
-
 let currencyName = "dólares";
 let currencyEmoji = "🇺🇸";
 
@@ -742,38 +731,6 @@ function penalizeListen() {
 
   updateHUD(-cost);
   flashHUD("listen");
-}
-
-function penalizeError(remaining) {
-  let penalty = 0;
-
-  if (remaining >= 5) penalty = 4;
-  else if (remaining === 4) penalty = 6;
-  else if (remaining === 3) penalty = 8;
-  else if (remaining === 2) penalty = 11;
-  else penalty = 15;
-
-  balance -= penalty;
-  wrongAttempts++;
-
-  updateHUD(-penalty);
-  flashHUD("loss");
-
-  soundLoss.currentTime = 0;
-  soundLoss.play();
-}
-
-function rewardSuccess() {
-  const gain = 2;
-
-  balance += gain;
-  correctMatches++;
-
-  updateHUD(gain);
-  flashHUD("gain");
-
-  soundGain.currentTime = 0;
-  soundGain.play();
 }
 
 let lastDelta = 0;
