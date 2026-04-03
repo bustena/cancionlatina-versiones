@@ -503,11 +503,7 @@ function renderBottomCards() {
 }
 
 function buildRound() {
-  const shuffled = shuffle(allPairs).filter((item) => item.audio1 && item.audio2);
-  roundPairs = shuffled.slice(0, Math.min(ROUND_SIZE, shuffled.length));
-
-  topCards = shuffle(roundPairs);
-  bottomCards = shuffle(roundPairs);
+  const availablePairs = allPairs.filter((item) => item.audio1 && item.audio2);
 
   if (roundNumber === 1) {
     pickCurrency();
@@ -515,7 +511,20 @@ function buildRound() {
     correctMatches = 0;
     wrongAttempts = 0;
     listenCount = 0;
-  }  
+
+    const shuffled = shuffle(availablePairs);
+    roundPairs = shuffled.slice(0, Math.min(ROUND_SIZE, shuffled.length));
+    usedPairIds = new Set(roundPairs.map(p => p.id));
+  } else {
+    const remaining = availablePairs.filter(p => !usedPairIds.has(p.id));
+    const shuffled = shuffle(remaining);
+    roundPairs = shuffled.slice(0, Math.min(ROUND_SIZE, shuffled.length));
+
+    roundPairs.forEach(p => usedPairIds.add(p.id));
+  }
+
+  topCards = shuffle(roundPairs);
+  bottomCards = shuffle(roundPairs);
 
   if (topCards.length > 1) {
     let aligned = true;
@@ -530,12 +539,27 @@ function buildRound() {
 
   solvedCount = 0;
   selectedTopId = null;
-  listenCount = 0;
   stopCurrentAudio();
   updateProgress();
+  updateHUD();
 
   renderTopCards();
   renderBottomCards();
+}
+
+function onRoundComplete() {
+  if (roundNumber === 1) {
+    roundNumber++;
+    showNextRoundButton();
+  } else {
+    showFinalScreen();
+  }
+}
+
+function showFinalScreen() {
+  const hud = document.getElementById("hud");
+
+  hud.textContent = `Final: ${currency}${balance} · ✔ ${correctMatches} · ✖ ${wrongAttempts}`;
 }
 
 function getRemainingPairs() {
