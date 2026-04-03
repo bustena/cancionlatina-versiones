@@ -284,14 +284,6 @@ body {
   width: 100%;
 }
 
-.card.bottom .bottom-text-overlay .text {
-  font-size: 0.76rem;
-  line-height: 1.38;
-  color: #1f2937;
-  margin: 0;
-  width: 100%;
-}
-
 .card.bottom .card-body {
   padding: 12px;
   background: transparent;
@@ -311,7 +303,15 @@ body {
   line-height: 1.35;
 }
 
-.card.bottom.correct .interprete {
+.card.bottom .ano-interprete {
+  margin-top: 2px;
+  font-size: 0.76rem;
+  line-height: 1.3;
+  opacity: 0.92;
+}
+
+.card.bottom.correct .interprete,
+.card.bottom.correct .ano-interprete {
   color: #ffffff;
 }
 
