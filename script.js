@@ -9,6 +9,25 @@ const FADE_INTERVAL_MS = 50;
 const topRowEl = document.getElementById("topRow");
 const bottomRowEl = document.getElementById("bottomRow");
 
+const overlayEl = document.getElementById("overlay");
+const overlayKickerEl = document.getElementById("overlayKicker");
+const overlayTitleEl = document.getElementById("overlayTitle");
+const overlayTextEl = document.getElementById("overlayText");
+const overlayButtonEl = document.getElementById("overlayButton");
+
+const currencies = [
+  { name: "dólares", symbol: "$", emoji: "🇺🇸" },
+  { name: "pesos mexicanos", symbol: "$", emoji: "🇲🇽" },
+  { name: "soles", symbol: "S/", emoji: "🇵🇪" },
+  { name: "bolívares", symbol: "Bs", emoji: "🇻🇪" },
+  { name: "guaraníes", symbol: "Gs", emoji: "🇵🇾" },
+  { name: "lempiras", symbol: "L", emoji: "🇭🇳" },
+  { name: "quetzales", symbol: "Q", emoji: "🇬🇹" },
+  { name: "córdobas", symbol: "C$", emoji: "🇳🇮" },
+  { name: "reales", symbol: "R$", emoji: "🇧🇷" },
+  { name: "pesos argentinos", symbol: "$", emoji: "🇦🇷" }
+];
+
 const soundGain = new Audio("assets/gain.mp3");
 const soundLoss = new Audio("assets/loss.mp3");
 
@@ -48,9 +67,31 @@ const currencies = [
   { symbol: "C$", name: "córdobas" }
 ];
 
+let currencyName = "dólares";
+let currencyEmoji = "🇺🇸";
+
 function pickCurrency() {
   const c = currencies[Math.floor(Math.random() * currencies.length)];
   currency = c.symbol;
+  currencyName = c.name;
+  currencyEmoji = c.emoji;
+}
+
+function singularCurrency(name) {
+  const map = {
+    "dólares": "dólar",
+    "pesos mexicanos": "peso mexicano",
+    "soles": "sol",
+    "bolívares": "bolívar",
+    "guaraníes": "guaraní",
+    "lempiras": "lempira",
+    "quetzales": "quetzal",
+    "córdobas": "córdoba",
+    "reales": "real",
+    "pesos argentinos": "peso argentino"
+  };
+
+  return map[name] || name;
 }
 
 function normalizeHeader(text) {
@@ -115,6 +156,60 @@ function escapeHtml(text) {
       "'": "&#039;"
     }[m];
   });
+}
+
+function showOverlayScreen(type) {
+  if (!overlayEl) return;
+
+  let kicker = "";
+  let title = "";
+  let text = "";
+  let buttonLabel = "Continuar";
+
+  if (type === "intro") {
+    kicker = "Presentación";
+    title = "Empareja las versiones";
+    text = `
+      <p>Escucha y empareja las <strong class="core">obras de la fila superior</strong> con las <strong class="core">versiones de la fila inferior</strong>.</p>
+      <p>Comenzarás con <strong class="core">100 ${currencyName} ${currencyEmoji}</strong>, que podrás <strong class="gain">incrementar</strong> o <strong class="loss">perder</strong> según tus aciertos y errores.</p>
+      <p>Escucha con atención para decidir con criterio.</p>
+    `;
+    buttonLabel = "Comenzar";
+  }
+
+  if (type === "round2") {
+    kicker = "Ronda 2";
+    title = "La segunda ronda comienza";
+    text = `
+      <p>En esta ronda, los <strong class="gain">aciertos valen más</strong> y los <strong class="loss">errores penalizan más</strong>.</p>
+      <p>Cada audición sigue costando <strong class="core">1 ${singularCurrency(currencyName)} ${currencyEmoji}</strong>.</p>
+    `;
+    buttonLabel = "Jugar ronda 2";
+  }
+
+  if (type === "final") {
+    kicker = "Final";
+    title = "Resultados";
+    text = `
+      <p>Saldo final: <strong class="core">${currency}${balance}</strong></p>
+      <p>Aciertos: <strong class="gain">${correctMatches}</strong> · Errores: <strong class="loss">${wrongAttempts}</strong></p>
+    `;
+    buttonLabel = "Cerrar";
+  }
+
+  overlayKickerEl.textContent = kicker;
+  overlayTitleEl.textContent = title;
+  overlayTextEl.innerHTML = text;
+  overlayButtonEl.textContent = buttonLabel;
+
+  overlayEl.classList.remove("is-hidden");
+
+  overlayButtonEl.onclick = () => {
+    if (type === "round2") {
+      buildRound();
+    }
+    overlayEl.classList.add("is-hidden");
+  };
 }
 
 function clearTopSelection() {
@@ -623,9 +718,9 @@ function buildRound() {
 function onRoundComplete() {
   if (roundNumber === 1) {
     roundNumber++;
-    showNextRoundButton();
+    showOverlayScreen("round2");
   } else {
-    showFinalScreen();
+    showOverlayScreen("final");
   }
 }
 
@@ -700,6 +795,40 @@ function updateHUD(delta = 0) {
   }
 }
 
+function penalizeError(remaining) {
+  let penalty = 0;
+
+  if (remaining >= 5) penalty = 4;
+  else if (remaining === 4) penalty = 6;
+  else if (remaining === 3) penalty = 8;
+  else if (remaining === 2) penalty = 11;
+  else penalty = 15;
+
+  if (roundNumber === 2) {
+    penalty += 3;
+  }
+
+  balance -= penalty;
+  wrongAttempts++;
+
+  updateHUD(-penalty);
+  flashHUD("loss");
+  soundLoss.currentTime = 0;
+  soundLoss.play();
+}
+
+function rewardSuccess() {
+  const gain = roundNumber === 2 ? 4 : 2;
+
+  balance += gain;
+  correctMatches++;
+
+  updateHUD(gain);
+  flashHUD("gain");
+  soundGain.currentTime = 0;
+  soundGain.play();
+}
+
 function fadeToBalanceOnly() {
   const hud = document.getElementById("hud");
   if (!hud) return;
@@ -723,8 +852,9 @@ function loadCSV() {
       allPairs = results.data
         .map(mapRow)
         .filter((item) => item.autor || item.obra || item.audio1 || item.audio2);
-
-      buildRound();
+    
+      buildRound();                 // 👈 prepara el tablero
+      showOverlayScreen("intro");   // 👈 muestra pantalla inicial
     },
     error: () => {
       topRowEl.innerHTML = "<p>No se pudo cargar el CSV.</p>";
