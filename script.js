@@ -322,7 +322,7 @@ function markSolved(pairId) {
   
     if (overlay) {
       overlay.innerHTML = `
-        <div class="text">${escapeHtml(pair.texto || "Emparejado correctamente.")}</div>
+        <div class="text">${pair.texto || "Emparejado correctamente."}</div>
       `;
     }
   
