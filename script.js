@@ -345,10 +345,8 @@ function markSolved(pairId) {
     if (meta) {
       if (pair.interprete || pair.ano_interprete) {
         meta.innerHTML = `
-          <div class="interprete">
-            ${pair.interprete || "Versión identificada"}
-            ${pair.ano_interprete ? ` <span class="ano-interprete">(${pair.ano_interprete})</span>` : ""}
-          </div>
+          <div class="interprete">${pair.interprete || "Versión identificada"}</div>
+          ${pair.ano_interprete ? `<div class="ano-interprete">${pair.ano_interprete}</div>` : ""}
         `;
       } else {
         meta.innerHTML = `<div class="interprete">Versión identificada</div>`;
