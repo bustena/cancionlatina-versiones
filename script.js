@@ -37,7 +37,7 @@ let roundPairs = [];
 let topCards = [];
 let bottomCards = [];
 
-let selectedTopId = null;
+let selectedCard = null;
 let solvedCount = 0;
 let listenCount = 0;
 
@@ -214,10 +214,34 @@ function showOverlayScreen(type) {
   };
 }
 
-function clearTopSelection() {
-  selectedTopId = null;
+function setSelection(id, row) {
+  selectedCard = { id, row };
 
-  document.querySelectorAll(".card.top").forEach((card) => {
+  document.querySelectorAll(".card").forEach((card) => {
+    const isActive =
+      card.dataset.id === id &&
+      ((row === "top" && card.classList.contains("top")) ||
+       (row === "bottom" && card.classList.contains("bottom")));
+
+    card.classList.toggle("active", isActive);
+
+    const badge = card.querySelector(".state-badge");
+    if (!badge) return;
+
+    if (card.classList.contains("locked")) {
+      badge.textContent = "Resuelta";
+    } else if (isActive) {
+      badge.textContent = "Seleccionada";
+    } else {
+      badge.textContent = "";
+    }
+  });
+}
+
+function clearSelection() {
+  selectedCard = null;
+
+  document.querySelectorAll(".card").forEach((card) => {
     card.classList.remove("active");
 
     const badge = card.querySelector(".state-badge");
@@ -528,7 +552,7 @@ function markSolved(pairId) {
   }
 
   solvedCount += 1;
-  clearTopSelection();
+  clearSelection();
   stopCurrentAudio();
 
   if (solvedCount === roundPairs.length) {
@@ -546,16 +570,18 @@ function flashError(card) {
   }, 280);
 }
 
-function tryMatch(bottomId, bottomCard) {
-  if (!selectedTopId) return;
+function tryMatch(id, row, card) {
+  if (!selectedCard) return;
 
-  if (selectedTopId === bottomId) {
+  const isMatch = selectedCard.id === id;
+
+  if (isMatch) {
     rewardSuccess();
-    markSolved(bottomId);
+    markSolved(id);
   } else {
     const remaining = getRemainingPairs();
     penalizeError(remaining);
-    flashError(bottomCard);
+    flashError(card);
   }
 }
 
@@ -603,11 +629,13 @@ function renderTopCards() {
     card.addEventListener("click", (event) => {
       if (card.classList.contains("locked")) return;
       if (event.target.closest(".audio-btn")) return;
-
-      if (selectedTopId === pair.id) {
-        clearTopSelection();
+    
+      if (selectedCard && selectedCard.id === pair.id && selectedCard.row === "top") {
+        clearSelection();
+      } else if (selectedCard && selectedCard.row === "bottom") {
+        tryMatch(pair.id, "top", card);
       } else {
-        setTopSelection(pair.id);
+        setSelection(pair.id, "top");
       }
     });
 
@@ -656,8 +684,14 @@ function renderBottomCards() {
     card.addEventListener("click", (event) => {
       if (card.classList.contains("locked")) return;
       if (event.target.closest(".audio-btn")) return;
-
-      tryMatch(pair.id, card);
+    
+      if (selectedCard && selectedCard.id === pair.id && selectedCard.row === "bottom") {
+        clearSelection();
+      } else if (selectedCard && selectedCard.row === "top") {
+        tryMatch(pair.id, "bottom", card);
+      } else {
+        setSelection(pair.id, "bottom");
+      }
     });
 
     const audioBtn = card.querySelector(".audio-btn");
