@@ -8,7 +8,6 @@ const FADE_INTERVAL_MS = 50;
 
 const topRowEl = document.getElementById("topRow");
 const bottomRowEl = document.getElementById("bottomRow");
-const progressEl = document.getElementById("progress");
 
 const soundGain = new Audio("assets/gain.mp3");
 const soundLoss = new Audio("assets/loss.mp3");
@@ -112,10 +111,6 @@ function escapeHtml(text) {
       "'": "&#039;"
     }[m];
   });
-}
-
-function updateProgress() {
-  progressEl.textContent = `${solvedCount}/${roundPairs.length} · escuchas: ${listenCount}`;
 }
 
 function clearTopSelection() {
@@ -297,7 +292,6 @@ function playRandomFragment(url, button, cardId) {
         if (currentAudioState !== state) return;
 
         listenCount += 1;
-        updateProgress();
 
         state.fadeInterval = fadeVolume(audio, 0, 1, fadeIn, () => {
           if (currentAudioState !== state) return;
@@ -381,7 +375,6 @@ function markSolved(pairId) {
   }
 
   solvedCount += 1;
-  updateProgress();
   clearTopSelection();
   stopCurrentAudio();
 
@@ -564,7 +557,6 @@ function buildRound() {
   solvedCount = 0;
   selectedTopId = null;
   stopCurrentAudio();
-  updateProgress();
   updateHUD();
 
   renderTopCards();
