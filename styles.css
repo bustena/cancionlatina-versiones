@@ -356,8 +356,10 @@ body {
   pointer-events: none;
 }
 
-.card.top.active .state-badge {
+.card.top.active .state-badge,
+.card.bottom.active .state-badge {
   opacity: 1;
+  background: #c2410c;
 }
 
 .card.top.locked {
@@ -367,9 +369,10 @@ body {
   cursor: default;
 }
 
-.card.top.locked .state-badge {
+.card.top.locked .state-badge,
+.card.bottom.correct .state-badge {
   opacity: 1;
-  background: rgba(0, 0, 0, 0.78);
+  background: #15803d;
 }
 
 /* INFERIORES */
@@ -484,12 +487,6 @@ body {
 .card.bottom.correct .interprete,
 .card.bottom.correct .ano-interprete {
   color: #ffffff;
-}
-
-/* BADGE */
-.card.bottom.correct .state-badge {
-  opacity: 1;
-  background: rgba(0, 0, 0, 0.78);
 }
 
 /* BLOQUEADA */
