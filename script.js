@@ -10,6 +10,9 @@ const topRowEl = document.getElementById("topRow");
 const bottomRowEl = document.getElementById("bottomRow");
 const progressEl = document.getElementById("progress");
 
+const soundGain = new Audio("assets/gain.mp3");
+const soundLoss = new Audio("assets/loss.mp3");
+
 let allPairs = [];
 let roundPairs = [];
 
@@ -130,6 +133,19 @@ function clearTopSelection() {
       badge.textContent = "";
     }
   });
+}
+
+function flashHUD(type) {
+  const hud = document.getElementById("hud");
+  if (!hud) return;
+
+  const className = type === "gain" ? "flash-green" : "flash-red";
+
+  hud.classList.add(className);
+
+  setTimeout(() => {
+    hud.classList.remove(className);
+  }, 220);
 }
 
 function setTopSelection(id) {
@@ -578,6 +594,7 @@ function penalizeListen() {
   balance -= 1;
   listenCount++;
   updateHUD();
+  flashHUD("loss");
 }
 
 function penalizeError(remaining) {
@@ -593,12 +610,16 @@ function penalizeError(remaining) {
   wrongAttempts++;
 
   updateHUD();
+  flashHUD("loss");
+  soundLoss.play();
 }
 
 function rewardSuccess() {
   balance += 2;
   correctMatches++;
   updateHUD();
+  flashHUD("gain");
+  soundGain.play();
 }
 
 function updateHUD() {
