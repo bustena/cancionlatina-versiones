@@ -96,7 +96,11 @@ function clearTopSelection() {
     card.classList.remove("active");
 
     const badge = card.querySelector(".state-badge");
-    if (badge) {
+    if (!badge) return;
+
+    if (card.classList.contains("locked")) {
+      badge.textContent = "Resuelta";
+    } else {
       badge.textContent = "";
     }
   });
@@ -110,8 +114,14 @@ function setTopSelection(id) {
     card.classList.toggle("active", isActive);
 
     const badge = card.querySelector(".state-badge");
-    if (badge) {
-      badge.textContent = isActive ? "Seleccionada" : "";
+    if (!badge) return;
+
+    if (card.classList.contains("locked")) {
+      badge.textContent = "Resuelta";
+    } else if (isActive) {
+      badge.textContent = "Seleccionada";
+    } else {
+      badge.textContent = "";
     }
   });
 }
