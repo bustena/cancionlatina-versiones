@@ -51,6 +51,7 @@ body {
   color: #ffffff;
   font-size: 1.2rem;
   font-weight: 700;
+  font-variant-numeric: tabular-nums;
   letter-spacing: 0.02em;
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
   transition: transform 0.18s ease, background 0.2s ease;
@@ -68,8 +69,14 @@ body {
   transform: scale(1.06);
 }
 
+.hud.flash-listen {
+  background: linear-gradient(135deg, #c2410c, #f97316);
+  transform: scale(1.05);
+}
+
 .hud.flash-green,
-.hud.flash-red {
+.hud.flash-red,
+.hud.flash-listen {
   animation: hudPulse 0.25s ease;
 }
 
