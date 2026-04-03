@@ -99,6 +99,18 @@ function normalizeColor(value) {
   return "#b8ab95";
 }
 
+function showLoadingOverlay() {
+  if (!overlayEl) return;
+
+  overlayEl.classList.remove("is-hidden");
+  overlayEl.classList.add("overlay-loading");
+
+  overlayKickerEl.textContent = "";
+  overlayTitleEl.textContent = "Cargando…";
+  overlayTextEl.innerHTML = "";
+  overlayButtonEl.hidden = true;
+}
+
 function mapRow(row, index) {
   const normalized = {};
 
@@ -150,14 +162,18 @@ function escapeHtml(text) {
 function showOverlayScreen(type) {
   if (!overlayEl) return;
 
+  overlayEl.classList.remove("is-hidden");
+  overlayEl.classList.remove("overlay-loading");
+  overlayButtonEl.hidden = false;
+
   let kicker = "";
   let title = "";
   let text = "";
   let buttonLabel = "Continuar";
 
   if (type === "intro") {
-    kicker = "Presentación";
-    title = "Empareja las versiones";
+    kicker = "";
+    title = "RONDA 1";
     text = `
       <p>Escucha y empareja las <strong class="core">obras de la fila superior</strong> con las <strong class="core">versiones de la fila inferior</strong>.</p>
       <p>Comenzarás con <strong class="core">100 ${currencyName} ${currencyEmoji}</strong>, que podrás <strong class="gain">incrementar</strong> o <strong class="loss">perder</strong> según tus aciertos y errores.</p>
@@ -167,18 +183,17 @@ function showOverlayScreen(type) {
   }
 
   if (type === "round2") {
-    kicker = "Ronda 2";
-    title = "La segunda ronda comienza";
+    kicker = "";
+    title = "RONDA 2";
     text = `
       <p>En esta ronda, los <strong class="gain">aciertos valen más</strong> y los <strong class="loss">errores penalizan más</strong>.</p>
-      <p>Cada audición sigue costando <strong class="core">1 ${singularCurrency(currencyName)} ${currencyEmoji}</strong>.</p>
     `;
-    buttonLabel = "Jugar ronda 2";
+    buttonLabel = "Jugar";
   }
 
   if (type === "final") {
-    kicker = "Final";
-    title = "Resultados";
+    kicker = "";
+    title = "RESULTADOS";
     text = `
       <p>Saldo final: <strong class="core">${currency}${balance}</strong></p>
       <p>Aciertos: <strong class="gain">${correctMatches}</strong> · Errores: <strong class="loss">${wrongAttempts}</strong></p>
@@ -190,8 +205,6 @@ function showOverlayScreen(type) {
   overlayTitleEl.textContent = title;
   overlayTextEl.innerHTML = text;
   overlayButtonEl.textContent = buttonLabel;
-
-  overlayEl.classList.remove("is-hidden");
 
   overlayButtonEl.onclick = () => {
     if (type === "round2") {
@@ -820,4 +833,5 @@ function loadCSV() {
   });
 }
 
+showLoadingOverlay();
 loadCSV();
