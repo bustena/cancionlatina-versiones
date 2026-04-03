@@ -22,6 +22,32 @@ let listenCount = 0;
 
 let currentAudioState = null;
 
+let balance = 100;
+let currency = "$";
+
+let correctMatches = 0;
+let wrongAttempts = 0;
+let listenCount = 0;
+
+let roundNumber = 1;
+let usedPairIds = new Set();
+
+const currencies = [
+  { symbol: "$", name: "dólares" },
+  { symbol: "$", name: "pesos" },
+  { symbol: "S/", name: "soles" },
+  { symbol: "Bs", name: "bolívares" },
+  { symbol: "Gs", name: "guaraníes" },
+  { symbol: "L", name: "lempiras" },
+  { symbol: "Q", name: "quetzales" },
+  { symbol: "C$", name: "córdobas" }
+];
+
+function pickCurrency() {
+  const c = currencies[Math.floor(Math.random() * currencies.length)];
+  currency = c.symbol;
+}
+
 function normalizeHeader(text) {
   return String(text || "")
     .trim()
@@ -202,6 +228,7 @@ function fadeVolume(audio, from, to, durationSeconds, onComplete) {
 }
 
 function playRandomFragment(url, button, cardId) {
+  penalizeListen();
   if (!url || !button || !cardId) return;
 
   const sameCardIsPlaying =
@@ -352,14 +379,14 @@ function flashError(card) {
 }
 
 function tryMatch(bottomId, bottomCard) {
-  if (!selectedTopId) {
-    flashError(bottomCard);
-    return;
-  }
+  if (!selectedTopId) return;
 
   if (selectedTopId === bottomId) {
+    rewardSuccess();
     markSolved(bottomId);
   } else {
+    const remaining = getRemainingPairs();
+    penalizeError(remaining);
     flashError(bottomCard);
   }
 }
@@ -482,6 +509,14 @@ function buildRound() {
   topCards = shuffle(roundPairs);
   bottomCards = shuffle(roundPairs);
 
+  if (roundNumber === 1) {
+    pickCurrency();
+    balance = 100;
+    correctMatches = 0;
+    wrongAttempts = 0;
+    listenCount = 0;
+  }  
+
   if (topCards.length > 1) {
     let aligned = true;
     let attempts = 0;
@@ -501,6 +536,44 @@ function buildRound() {
 
   renderTopCards();
   renderBottomCards();
+}
+
+function getRemainingPairs() {
+  return roundPairs.filter(pair => !solvedPairs.has(pair.id)).length;
+}
+
+function penalizeListen() {
+  balance -= 1;
+  listenCount++;
+  updateHUD();
+}
+
+function penalizeError(remaining) {
+  let penalty = 0;
+
+  if (remaining >= 5) penalty = 4;
+  else if (remaining === 4) penalty = 6;
+  else if (remaining === 3) penalty = 8;
+  else if (remaining === 2) penalty = 11;
+  else penalty = 15;
+
+  balance -= penalty;
+  wrongAttempts++;
+
+  updateHUD();
+}
+
+function rewardSuccess() {
+  balance += 2;
+  correctMatches++;
+  updateHUD();
+}
+
+function updateHUD() {
+  const hud = document.getElementById("hud");
+  if (!hud) return;
+
+  hud.textContent = `${currency}${balance} · ✔ ${correctMatches} · ✖ ${wrongAttempts}`;
 }
 
 function loadCSV() {
