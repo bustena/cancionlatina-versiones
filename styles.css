@@ -93,6 +93,8 @@ body {
 }
 
 .overlay-title {
+  text-align: center;
+  width: 100%;
   margin: 0 0 14px;
   font-size: 1.9rem;
   line-height: 1.05;
@@ -122,6 +124,8 @@ body {
 }
 
 .overlay-button {
+  text-align: center;
+  width: 100%;
   margin-top: 18px;
   border: none;
   border-radius: 999px;
@@ -137,6 +141,19 @@ body {
 .overlay-button:hover {
   background: #111827;
   transform: translateY(-1px);
+}
+
+.overlay-text p strong.core {
+  font-size: 1.4rem;
+}
+
+.overlay-text p strong.gain,
+.overlay-text p strong.loss {
+  font-size: 1.2rem;
+}
+
+.overlay-title + .overlay-text p:first-child {
+  font-size: 1.2rem;
 }
 
 /* CABECERA */
