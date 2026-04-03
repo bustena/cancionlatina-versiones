@@ -33,6 +33,8 @@ let wrongAttempts = 0;
 let roundNumber = 1;
 let usedPairIds = new Set();
 
+let hudTimeout = null;
+
 const currencies = [
   { symbol: "$", name: "dólares" },
   { symbol: "$", name: "pesos" },
@@ -634,14 +636,41 @@ function updateHUD(delta = 0) {
   const hud = document.getElementById("hud");
   if (!hud) return;
 
-  lastDelta = delta;
-
   const sign = delta > 0 ? "+" : "";
   const deltaText = delta !== 0 ? `${sign}${delta}` : "";
 
+  // mostrar con delta
   hud.textContent = delta !== 0
     ? `${deltaText} | ${currency}${balance}`
     : `${currency}${balance}`;
+
+  // limpiar timeout anterior
+  if (hudTimeout) {
+    clearTimeout(hudTimeout);
+  }
+
+  // si hay delta, programar desaparición
+  if (delta !== 0) {
+    hudTimeout = setTimeout(() => {
+      fadeToBalanceOnly();
+    }, 1400); // ajusta aquí (1200–1800)
+  }
+}
+
+function fadeToBalanceOnly() {
+  const hud = document.getElementById("hud");
+  if (!hud) return;
+
+  // fade out ligero
+  hud.style.transition = "opacity 0.2s ease";
+  hud.style.opacity = "0.6";
+
+  setTimeout(() => {
+    hud.textContent = `${currency}${balance}`;
+
+    // fade in
+    hud.style.opacity = "1";
+  }, 180);
 }
 
 function loadCSV() {
