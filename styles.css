@@ -260,19 +260,36 @@ body {
 
 .card.bottom .bottom-text-overlay {
   position: absolute;
-  left: 10px;
-  right: 10px;
-  bottom: 10px;
-  padding: 10px 12px;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.82);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  color: #1f2937;
+  inset: 0;
+  padding: 12px;
+  display: flex;
+  align-items: flex-end;
+  background: linear-gradient(
+    to top,
+    rgba(255, 255, 255, 0.92) 0%,
+    rgba(255, 255, 255, 0.72) 38%,
+    rgba(255, 255, 255, 0.18) 62%,
+    rgba(255, 255, 255, 0) 78%
+  );
   opacity: 0;
-  transform: translateY(6px);
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  transition: opacity 0.2s ease;
   pointer-events: none;
+}
+
+.card.bottom .bottom-text-overlay .text {
+  font-size: 0.76rem;
+  line-height: 1.38;
+  color: #1f2937;
+  margin: 0;
+  width: 100%;
+}
+
+.card.bottom .bottom-text-overlay .text {
+  font-size: 0.76rem;
+  line-height: 1.38;
+  color: #1f2937;
+  margin: 0;
+  width: 100%;
 }
 
 .card.bottom .card-body {
