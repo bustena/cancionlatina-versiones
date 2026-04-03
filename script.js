@@ -767,15 +767,15 @@ function updateHUD(delta = 0) {
 
 function penalizeError(remaining) {
   let penalty = 0;
-
-  if (remaining >= 5) penalty = 4;
-  else if (remaining === 4) penalty = 6;
-  else if (remaining === 3) penalty = 8;
-  else if (remaining === 2) penalty = 11;
-  else penalty = 15;
-
+  
+  if (remaining >= 5) penalty = 8;
+  else if (remaining === 4) penalty = 12;
+  else if (remaining === 3) penalty = 16;
+  else if (remaining === 2) penalty = 22;
+  else penalty = 30;
+  
   if (roundNumber === 2) {
-    penalty += 3;
+    penalty += 6;
   }
 
   balance -= penalty;
@@ -788,7 +788,7 @@ function penalizeError(remaining) {
 }
 
 function rewardSuccess() {
-  const gain = roundNumber === 2 ? 4 : 2;
+  const gain = roundNumber === 2 ? 10 : 5;
 
   balance += gain;
   correctMatches++;
