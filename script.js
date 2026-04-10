@@ -1,7 +1,7 @@
 const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSJM_fPxtlc5UEyNf0DHLNg5B4tGIm8Qbba3k78kbQDRj9a9jGpSDRHwz_UOgAz4jbpcRJKHEUe1eNY/pub?gid=1007467973&single=true&output=csv";
 
 const ROUND_SIZE = 5;
-const FRAGMENT_SECONDS = 10;
+const FRAGMENT_SECONDS = 16;
 const FADE_IN_SECONDS = 0.8;
 const FADE_OUT_SECONDS = 0.8;
 const FADE_INTERVAL_MS = 50;
